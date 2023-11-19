@@ -15,12 +15,14 @@ Temiloluwa Omoniwa - 301209585
 */
 
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 
 // Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
 let patients = [{
