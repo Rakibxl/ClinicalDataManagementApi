@@ -85,7 +85,7 @@ app.post('/patients/:id', (req, res) => {
 
       console.log(`Updated tests for patient ${id}:`, patient.tests);
       
-      res.send("Patient Test Info Updated");
+      res.send(`Updated tests for patient ${id}:`, patient.tests);
     } else {
       // Patient not found
       console.log(`Patient not found with ID ${id}`);
