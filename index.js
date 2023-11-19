@@ -99,6 +99,7 @@ app.post('/patients/:id', (req, res) => {
 });
 
 
+
 // Search for a patient in the list
 app.get('/patients/:id', (req, res) => {
   const { id } = req.params;
