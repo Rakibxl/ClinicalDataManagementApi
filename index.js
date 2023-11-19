@@ -33,7 +33,8 @@ let patients = [{
     bloodPressure : '120',
     respiratoryRate : '100',
     bloodOxygen : '80',
-    heartBeatRate : '70'
+    heartBeatRate : '70',
+    timestamp: '11/8/2023, 5:00:00 AM'
   }]
 }];
 
