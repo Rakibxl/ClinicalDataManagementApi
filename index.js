@@ -14,74 +14,79 @@ Ahmed Rakib - 301243511
 Temiloluwa Omoniwa - 301209585
 */
 
-const express = require('express')
+const express = require('express');
 
-const app = express()
-const port =  3000
+const app = express();
+const port = 3000;
 
+// Middleware for parsing JSON and URL-encoded data
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 let patients = [{
   id: '1',
-  name:'john',
+  name: 'John',
   date: '06-06-2023',
   tests: [{}]
 }];
 
-// get the patient list in the form of JSON
+// Root endpoint
+app.get('/', (req, res) => {
+  res.send('Welcome to My Clinical Data Management API');
+});
+
+// Get the patient list in the form of JSON
 app.get('/patients', (req, res) => {
-  res.json(patients)
+  res.json(patients);
 });
 
-// add a new patient to the list
-app.post('/patients',  (req, res) => {
-const patient = req.body;
-patients.push(patient)
-res.send("Patient Info Updated")
+// Add a new patient to the list
+app.post('/patients', (req, res) => {
+  const patient = req.body;
+  // TODO: Add data validation here
+  patients.push(patient);
+  res.status(201).send("Patient Info Added");
 });
 
-// add a new patient test to the list
-app.post('/patients/:id',  (req, res) => {
-  const id = req.params.id
-  const numID = parseInt(id) - 1
+// Add a new patient test to the list
+app.post('/patients/:id', (req, res) => {
+  const { id } = req.params;
   const test = req.body;
-  console.log(numID)
-
-  for (let patient of patients) {
-    if(patient.id === id) {
-      patients[numID].tests.push(test)
-    }  
+  // TODO: Add data validation here
+  const patient = patients.find(p => p.id === id);
+  if (patient) {
+    patient.tests.push(test);
+    res.send("Patient Test Info Updated");
+  } else {
+    res.status(404).send("Patient not found");
   }
-  res.send("Patient test Info Updated")
-  });
+});
 
-//search for a patient on the list
+// Search for a patient in the list
+app.get('/patients/:id', (req, res) => {
+  const { id } = req.params;
+  const patient = patients.find(p => p.id === id);
+  if (patient) {
+    res.json(patient);
+  } else {
+    res.status(404).send('Patient not found');
+  }
+});
 
-app.get(`/patients/:id`, (req, res) => {
-  const id = req.params.id
+// Remove a patient from the list
+app.delete('/patients/:id', (req, res) => {
+  const { id } = req.params;
+  const initialLength = patients.length;
+  patients = patients.filter(patient => patient.id !== id);
+  
+  if (patients.length < initialLength) {
+    res.send('Patient record deleted');
+  } else {
+    res.status(404).send('Patient not found');
+  }
+});
 
-    for (let patient of patients) {
-      if(patient.id === id) {
-        res.json(patient)
-      }  
-    }
-    res.status(404).send('patient not found')
-})
-
-//remove patient from  the list
-app.delete(`/patients/:id`, (req,res) =>{
-  const id = req.params.id;
-
-  patients = patients.filter(patient =>{
-    if (patient.id !== id) {
-      return true
-    }
-    return false
-  })
-  res.send('Patient record deleted')
-})
-
-// set the server to listen at port
+// Start the server
 app.listen(port, () => console.log(`Server listening at port ${port}`));
+
 
