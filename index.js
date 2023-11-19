@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 let patients = [{
   id: '1',
   name: 'John',
-  date: '06-06-2023',
+  date: '2023-05-07',
   tests: [{}]
 }];
 
