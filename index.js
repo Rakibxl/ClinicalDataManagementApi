@@ -29,7 +29,12 @@ let patients = [{
   id: '189581',
   name: 'John Kabir',
   date: '1992-05-07',
-  tests: [{}]
+  tests: [{
+    bloodPressure : '120',
+    respiratoryRate : '100',
+    bloodOxygen : '80',
+    heartBeatRate : '70'
+  }]
 }];
 
 // Root endpoint
