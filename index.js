@@ -57,18 +57,47 @@ app.post('/patients', (req, res) => {
 });
 
 // Add a new patient test to the list
+// app.post('/patients/:id', (req, res) => {
+//   const { id } = req.params;
+//   const test = req.body;
+//   // TODO: Add data validation here
+//   const patient = patients.find(p => p.id === id);
+//   if (patient) {
+//     patient.tests.push(test);
+//     res.send("Patient Test Info Updated");
+//   } else {
+//     res.status(404).send("Patient not found");
+//   }
+// });
+
 app.post('/patients/:id', (req, res) => {
   const { id } = req.params;
   const test = req.body;
-  // TODO: Add data validation here
-  const patient = patients.find(p => p.id === id);
-  if (patient) {
-    patient.tests.push(test);
-    res.send("Patient Test Info Updated");
-  } else {
-    res.status(404).send("Patient not found");
+
+  console.log(`Received test data for patient ${id}:`, test);
+
+  try {
+    // Find the patient by ID
+    const patient = patients.find(p => p.id === id);
+    if (patient) {
+      // Add the test data to the patient's tests array
+      patient.tests.push(test);
+
+      console.log(`Updated tests for patient ${id}:`, patient.tests);
+      
+      res.send("Patient Test Info Updated");
+    } else {
+      // Patient not found
+      console.log(`Patient not found with ID ${id}`);
+      res.status(404).send("Patient not found");
+    }
+  } catch (error) {
+    // Log the error and send a 500 response
+    console.error(`Error processing request for patient ${id}:`, error);
+    res.status(500).send("Internal Server Error");
   }
 });
+
 
 // Search for a patient in the list
 app.get('/patients/:id', (req, res) => {
