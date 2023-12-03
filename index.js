@@ -43,6 +43,50 @@ app.get('/', (req, res) => {
   res.send('Welcome to My Clinical Data Management API');
 });
 
+let users = [
+  
+  { username: 'admin', password: 'admin123' }
+];
+
+// SignUp a new user
+app.post('/signup', (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).send("Username and password are required");
+  }
+
+  // Check if user already exists
+  const existingUser = users.find(user => user.username === username);
+  if (existingUser) {
+    return res.status(409).send("User already exists");
+  }
+
+  // Add new user (passwords should be hashed in a real-world scenario)
+  users.push({ username, password });
+  res.status(201).send("User created");
+});
+
+
+// SignIn an existing user
+app.post('/signin', (req, res) => {
+  const { username, password } = req.body;
+
+
+  if (!username || !password) {
+    return res.status(400).send("Username and password are required");
+  }
+
+  const user = users.find(user => user.username === username && user.password === password);
+
+  if (!user) {
+    return res.status(401).send("Invalid credentials");
+  }
+
+  res.status(200).send(`Welcome ${username}`);
+});
+
+
 // Get the patient list in the form of JSON
 app.get('/patients', (req, res) => {
   res.json(patients);
