@@ -101,18 +101,36 @@ app.post('/patients', (req, res) => {
 });
 
 // Add a new patient test to the list
-   app.post('/patients/:id', (req, res) => {
-     const { id } = req.params;
-   const test = req.body;
-//   // TODO: Add data validation here
-   const patient = patients.find(p => p.id === id);
-   if (patient) {
-     patient.tests.push(test);
-     res.json({ message: "Patient Test Info Updated", updatedTests: patient.tests });;
-   } else {
-     res.status(404).send("Patient not found");
-   }
- });
+//    app.post('/patients/:id', (req, res) => {
+//      const { id } = req.params;
+//    const test = req.body;
+// //   // TODO: Add data validation here
+//    const patient = patients.find(p => p.id === id);
+//    if (patient) {
+//      patient.tests.push(test);
+//      res.json({ message: "Patient Test Info Updated", updatedTests: patient.tests });;
+//    } else {
+//      res.status(404).send("Patient not found");
+//    }
+//  });
+
+app.post('/patients/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const test = req.body;
+    const patient = patients.find(p => p.id === id);
+    
+    if (patient) {
+      patient.tests.push(test);
+      res.json({ message: "Patient Test Info Updated", updatedTests: patient.tests });
+    } else {
+      res.status(404).send("Patient not found");
+    }
+  } catch (error) {
+    console.error('Error in /patients/:id endpoint:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 // app.post('/patients/:id', (req, res) => {
 //   const { id } = req.params;
